@@ -1,164 +1,201 @@
-# ✂️ Golden Scissor Spa & Saloon — Commercial Lounge Platform
+<div align="center">
 
-A commercial, production-ready MERN stack web application for **Golden Scissor Spa & Saloon**, designed with the **"Imperial Gilded Noir"** aesthetic system — an ultra-luxury dark palette featuring gold (#f2ca50) accents, glassmorphic paneling, Playfair Display & Manrope typography, WebGL gilded mist background shaders, and smooth micro-interactions.
+<img src="assets/screenshot.png" alt="Golden Scissor Spa & Saloon — App Preview" width="100%"/>
 
----
+# ✂️ Golden Scissor Spa & Saloon
 
-## 🌟 Key Features
+**A full-stack luxury salon management platform built with the MERN stack.**
+Pixel-perfect "Imperial Gilded Noir" design — Noir & Gold aesthetic with glass-morphism, smooth animations, and a complete booking ecosystem.
 
-### 👑 Public Lounge Website
-- **Home:** Full-screen hero with WebGL animated background, legacy stats counter, expertise showcases, and concierge booking CTA.
-- **About Us:** Sanctuary history, stat counters (5000+ clients, 10+ years), story highlights, and mission/vision cards.
-- **Services:** Interactive service catalog filtered by category (Signature, Artisan, Rejuvenation, Therapy, Wellness, Lustre).
-- **Pricing:** 3-tier membership structures (Essential $45, Signature $85, Royal $150).
-- **Gallery:** Interactive portfolio with category filter tabs and fullscreen lightbox preview.
-- **Master Stylists:** Staff roster with experience counters, star ratings, and specialty badges.
-- **Membership:** Club subscription plans and reward discount details.
-- **Offers:** Active promotional codes (e.g., `GOLDEN20`, `ROYAL15`).
-- **Testimonials:** Verified patron reviews with admin responses.
-- **Contact:** Split contact details, direct WhatsApp links, and interactive concierge callback request forms.
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js)](https://nodejs.org)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=for-the-badge&logo=mongodb)](https://mongodb.com)
 
-### 📅 Booking & Concierge Engine
-- **4-Step Wizard:** Service Selection ➔ Master Stylist Picker ➔ Date & Slot Selector ➔ Final Details.
-- **Double-Booking Prevention:** Real-time slot availability calculator ensuring stylists are never double-reserved.
-- **Automated Notifications:** Confirmation emails (Nodemailer HTML templates) + 24-hour cancellation rule enforcement.
-
-### 🔐 Authentication & RBAC
-- **JWT & HTTP-Only Cookies:** Role-based access control supporting `customer`, `staff`, and `admin` roles.
-- **Secure Password Hashing:** `bcryptjs` with salt rounds.
-
-### 📊 Customer & Admin Dashboards
-- **Customer Dashboard:** Reservation history, loyalty point counters (10% earnings per booking), saved wishlist, and active memberships.
-- **Admin Dashboard:** Executive KPIs (Total Revenue, Reservations Count, Pending Approvals, Customer Growth), interactive reservation control table with status transitions (`pending` ➔ `confirmed` ➔ `completed` ➔ `cancelled`), and concierge callback manager.
+</div>
 
 ---
 
-## 🛠️ Technology Stack
+## 🌟 Features
 
-| Layer | Technologies |
-|---|---|
-| **Frontend** | React 19, Vite, React Router v7, SCSS Modules, WebGL Shaders, Axios |
-| **Backend** | Node.js, Express.js |
-| **Database** | MongoDB Atlas, Mongoose ORM |
-| **Auth** | JWT, HTTP-Only Cookies, Role-Based Access Control |
-| **Uploads** | Multer, Cloudinary SDK |
-| **Email** | Nodemailer |
-| **Security** | Helmet, Express Rate Limit, Mongo Sanitize, XSS Clean, CORS, Compression |
+### 🎨 Customer-Facing Website
+- **Home** — Animated hero with WebGL gold-particle canvas, stats bar, service previews
+- **About** — Brand story & studio philosophy
+- **Services** — Full service catalogue with categories & filters
+- **Pricing** — Tiered pricing cards
+- **Gallery** — Masonry photo gallery
+- **Team** — Artisan profiles with specialties
+- **Membership** — Loyalty membership plans
+- **Offers** — Live promotional offers
+- **Testimonials** — Client review carousel
+- **Contact** — Contact form + map embed
+
+### 📅 Booking System
+- 4-step appointment wizard (Service → Staff → Date/Time → Confirm)
+- Real-time slot availability checking
+- Double-booking protection
+- Email confirmation on booking
+
+### 🔐 Authentication
+- JWT in `httpOnly` cookies (secure, sameSite production flags)
+- Register / Login / Forgot Password / Reset Password
+- Role-based access: `customer` · `staff` · `admin`
+
+### 👤 Customer Dashboard
+- Upcoming & past bookings
+- Wishlist / saved services
+- Loyalty points tracker
+
+### 🧑‍💼 Staff Portal
+- Today's appointment schedule
+- All-reservations table with status management
+- Weekly availability editor
+
+### ⚙️ Admin Dashboard
+- KPI cards (revenue, bookings, clients, rating)
+- Reservation control panel
+- Concierge inquiry management
 
 ---
 
-## 📂 Folder Structure
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19, Vite 8, React Router v7 |
+| Styling | SCSS Modules, CSS animations |
+| Fonts | Playfair Display · Manrope (Google Fonts) |
+| Backend | Node.js, Express.js |
+| Database | MongoDB + Mongoose ODM |
+| Auth | JWT + httpOnly cookies |
+| Media | Cloudinary (image upload) |
+| Email | Nodemailer (Gmail SMTP) |
+| Security | Helmet · rate-limit · xss-clean · mongo-sanitize |
+| Deploy | Vercel (frontend) · Render (backend) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js ≥ 18
+- MongoDB Atlas account (free tier works)
+- Cloudinary account (free tier)
+- Gmail account (for email service)
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/siyamsenju-create/Golden_Scissor_Spa_Project.git
+cd Golden_Scissor_Spa_Project
+```
+
+### 2. Backend setup
+```bash
+cd server
+npm install
+cp .env.example .env
+# → Fill in your MONGO_URI, JWT_SECRET, Cloudinary & Email credentials
+npm run dev
+# Server starts on http://localhost:5000
+```
+
+### 3. Frontend setup
+```bash
+cd ../client
+npm install
+npm run dev
+# App starts on http://localhost:5173
+```
+
+### 4. Seed sample data (optional)
+```bash
+cd server
+node src/seed/seed.js
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 golden-scissor-spa/
-├── client/                      # React 19 + Vite frontend
-│   ├── src/
-│   │   ├── components/          # Reusable Navbar, Footer, WebGLBackground, ConciergeWidget
-│   │   ├── pages/               # Home, About, Services, Pricing, Gallery, Team, Booking, etc.
-│   │   │   ├── dashboard/       # Customer Dashboard
-│   │   │   └── admin/           # Admin Dashboard
-│   │   ├── styles/              # SCSS variables, mixins, global styles
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── vercel.json              # Vercel SPA deployment config
+├── assets/                    # Screenshots & media
+├── client/                    # React 19 + Vite frontend
+│   └── src/
+│       ├── App.jsx            # Root router (17 routes)
+│       ├── styles/            # SCSS design tokens & globals
+│       ├── components/common/ # Navbar, Footer, ConciergeWidget, WebGLBG
+│       └── pages/             # All 17 pages + 3 dashboards
 │
-└── server/                      # Node.js + Express backend
-    ├── src/
-    │   ├── config/              # MongoDB & Cloudinary SDK setup
-    │   ├── controllers/         # Auth, Booking, Service, Staff, Gallery, Review, Analytics, etc.
-    │   ├── middleware/          # Auth JWT guard, Role RBAC, Express Validator, Error Handler
-    │   ├── models/              # Mongoose Schemas (User, Staff, Service, Booking, Review, etc.)
-    │   ├── routes/              # Express API Route Groups
-    │   ├── seed/                # Database Seeding Script (`seed.js`)
-    │   └── services/            # Nodemailer Email Transporter
-    ├── server.js                # Server entry point
-    └── render.yaml              # Render deployment config
+└── server/                    # Node.js + Express backend
+    ├── server.js
+    ├── .env.example
+    └── src/
+        ├── models/            # 10 Mongoose models
+        ├── controllers/       # 11 REST controllers
+        ├── routes/            # 12 route groups
+        ├── middleware/        # Auth · RBAC · Error · Validation
+        ├── services/          # Email service
+        ├── config/            # DB + Cloudinary config
+        └── seed/              # Sample data seeder
 ```
 
 ---
 
-## ⚡ Quick Start Guide
+## 🌐 API Endpoints (Sample)
 
-### Prerequisites
-- Node.js (v18+)
-- MongoDB Atlas database URI (or local MongoDB running on `mongodb://localhost:27017/golden-scissor-spa`)
-
-### 1. Backend Setup
-```bash
-cd server
-npm install --legacy-peer-deps
-
-# Create environment file from sample
-cp .env .env.local
-
-# Seed initial database records (Admin, Staff, Services, Memberships, Offers)
-npm run seed
-
-# Start development server
-npm run dev
 ```
-Backend server will run on `http://localhost:5000`.
+POST  /api/auth/register       Sign up new customer
+POST  /api/auth/login          Authenticate & receive JWT cookie
+GET   /api/auth/me             Get current user profile
 
-### Default Credentials (Seeded):
-- **Admin:** `admin@goldenscissorspa.com` / `password123`
-- **Customer:** `customer@goldenscissorspa.com` / `password123`
-- **Staff:** `julian@goldenscissorspa.com` / `password123`
+GET   /api/services            List all services
+GET   /api/staff               List all artisans
+GET   /api/gallery             Fetch gallery images
 
----
+POST  /api/bookings            Create appointment
+PUT   /api/bookings/:id/status Update booking status
 
-### 2. Frontend Setup
-```bash
-cd client
-npm install
-
-# Start Vite dev server
-npm run dev
+GET   /api/analytics/overview  Admin KPI summary
+POST  /api/contact             Submit contact inquiry
+GET   /api/reviews             Fetch client testimonials
 ```
-Frontend application will open on `http://localhost:5173`.
 
 ---
 
-## 📡 API Endpoints
+## ☁️ Deployment
 
-### 🔐 Auth Routes (`/api/auth`)
-- `POST /register` — Register new user
-- `POST /login` — Log in & receive HTTP-only cookie
-- `POST /logout` — Log out user
-- `GET /me` — Get current user profile
-- `POST /forgot-password` — Request password reset email
+### Backend → Render.com
+1. Create a **Web Service** from this repo
+2. Root directory: `server/`
+3. Build: `npm install` · Start: `node server.js`
+4. Add all env vars from `.env.example`
 
-### 📅 Booking Routes (`/api/bookings`)
-- `GET /slots` — Get available time slots for stylist & date
-- `POST /` — Reserve an experience (Auth required)
-- `GET /` — List user's bookings (Customer / Admin)
-- `PUT /:id/status` — Update booking status (`confirmed`, `completed`, `cancelled`) [Admin/Staff]
-- `PUT /:id/cancel` — Cancel appointment (24h rule)
-
-### 💈 Service Routes (`/api/services`)
-- `GET /` — Public services list
-- `POST /` — Add new service with Cloudinary image upload [Admin]
-- `PUT /:id` — Edit service details [Admin]
-
-### 🖼️ Gallery Routes (`/api/gallery`)
-- `GET /` — Get gallery items filtered by category
-- `POST /` — Upload portfolio photo to Cloudinary [Admin]
+### Frontend → Vercel
+1. Import repo → root: `client/`
+2. Framework preset: **Vite**
+3. Add `VITE_API_URL=https://your-render-url.onrender.com`
 
 ---
 
-## 🚀 Deployment Instructions
+## 🎨 Design System — "Imperial Gilded Noir"
 
-### Frontend (Vercel)
-1. Import `client/` directory into Vercel.
-2. Set build command: `npm run build` and output directory: `dist`.
-3. Add environment variable: `VITE_API_URL=https://your-backend-url.onrender.com`.
-
-### Backend (Render)
-1. Import `server/` repository into Render Web Services.
-2. Build command: `npm install --legacy-peer-deps`.
-3. Start command: `npm start`.
-4. Configure Environment Variables (`MONGO_URI`, `JWT_SECRET`, `CLOUDINARY_*`, `EMAIL_*`).
+| Token | Value | Usage |
+|-------|-------|-------|
+| Background | `#131313` | Page background |
+| Gold | `#f2ca50` | Accents, CTAs |
+| Surface | `#1c1b1b` | Cards & panels |
+| Text | `#e5e2e1` | Primary text |
+| Muted | `#d0c5af` | Secondary text |
+| Heading | Playfair Display | Serif elegance |
+| Body | Manrope | Clean readability |
 
 ---
 
-## 📜 License
-This software product is released under the **MIT License**.
+## 📄 License
+
+MIT — free to use for personal and commercial projects.
+
+---
+
+<div align="center">Built with ♥ for luxury grooming excellence</div>
