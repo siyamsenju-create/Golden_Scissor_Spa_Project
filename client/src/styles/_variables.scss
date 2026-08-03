@@ -1,0 +1,37 @@
+// Imperial Gilded Noir Colors
+$color-surface: #131313;
+$color-surface-dim: #131313;
+$color-surface-bright: #3a3939;
+$color-surface-lowest: #0e0e0e;
+$color-surface-low: #1c1b1b;
+$color-surface-container: #201f1f;
+$color-surface-high: #2a2a2a;
+$color-surface-highest: #353534;
+$color-on-surface: #e5e2e1;
+$color-on-surface-variant: #d0c5af;
+$color-outline: #99907c;
+$color-outline-variant: #4d4635;
+$color-primary: #f2ca50; // Luxury Gold
+$color-on-primary: #3c2f00;
+$color-primary-container: #d4af37;
+$color-tertiary: #ffc565;
+$color-background: #131313;
+
+// Fonts
+$font-headline: 'Playfair Display', Georgia, serif;
+$font-body: 'Manrope', sans-serif;
+
+// Layout
+$margin-desktop: 80px;
+$margin-mobile: 20px;
+$container-max: 1440px;
+$gutter: 24px;
+$unit: 8px;
+
+// Radius
+$radius-sm: 0.125rem;
+$radius-default: 0.25rem;
+$radius-md: 0.375rem;
+$radius-lg: 0.5rem;
+$radius-xl: 0.75rem;
+$radius-full: 9999px;

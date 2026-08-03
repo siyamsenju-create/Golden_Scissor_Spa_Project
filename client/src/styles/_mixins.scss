@@ -1,0 +1,54 @@
+@use 'variables' as *;
+
+
+@mixin glass-panel {
+  background: rgba(19, 19, 19, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba($color-primary, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    border-color: $color-primary;
+    background: rgba(19, 19, 19, 0.6);
+    box-shadow: 0 0 30px rgba($color-primary, 0.05);
+  }
+}
+
+@mixin gold-shine-effect {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba($color-primary, 0.4), transparent);
+    transform: skewX(-25deg);
+    transition: 0s;
+  }
+
+  &:hover::after {
+    animation: shine 0.8s forwards;
+  }
+}
+
+@mixin custom-scrollbar {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: $color-surface-lowest;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: $color-outline-variant;
+    border-radius: 4px;
+
+    &:hover {
+      background: $color-primary;
+    }
+  }
+}
