@@ -7,7 +7,7 @@ const Services = () => {
   const [activeCategory, setActiveCategory] = useState('All');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/services')
+    axios.get('http://localhost:5001/api/services')
       .then(res => setServices(res.data.data))
       .catch(() => {
         setServices([

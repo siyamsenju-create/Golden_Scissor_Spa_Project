@@ -22,7 +22,7 @@ const Booking = () => {
   const [successMsg, setSuccessMsg] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/services')
+    axios.get('http://localhost:5001/api/services')
       .then(res => setServices(res.data.data))
       .catch(() => {
         setServices([
@@ -33,7 +33,7 @@ const Booking = () => {
         ]);
       });
 
-    axios.get('http://localhost:5000/api/staff')
+    axios.get('http://localhost:5001/api/staff')
       .then(res => setStaffList(res.data.data))
       .catch(() => {
         setStaffList([
@@ -47,7 +47,7 @@ const Booking = () => {
   // Fetch slot options when date/stylist changes
   useEffect(() => {
     if (selectedStylist && selectedDate) {
-      axios.get(`http://localhost:5000/api/bookings/slots?staffId=${selectedStylist._id}&date=${selectedDate}`)
+      axios.get(`http://localhost:5001/api/bookings/slots?staffId=${selectedStylist._id}&date=${selectedDate}`)
         .then(res => setAvailableSlots(res.data.data))
         .catch(() => {
           setAvailableSlots([
@@ -101,18 +101,39 @@ const Booking = () => {
       staffId: selectedStylist._id,
       date: selectedDate,
       timeSlot: selectedSlot,
-      notes: contactData.notes
+      notes: contactData.notes,
+      customerName: contactData.name,
+      customerPhone: contactData.phone,
+      customerEmail: contactData.email
     };
 
-    axios.post('http://localhost:5000/api/bookings', payload, { withCredentials: true })
+    axios.post('http://localhost:5001/api/bookings', payload, { withCredentials: true })
       .then(res => {
-        setSuccessMsg('Reservation confirmed! Redirecting to your dashboard...');
-        setTimeout(() => navigate('/dashboard'), 2000);
+        const { booking, whatsappSent } = res.data.data;
+        const bookingId = booking._id;
+        
+        if (whatsappSent) {
+          setSuccessMsg(
+            `Booking Confirmed ✓\n\n` +
+            `Your appointment has been successfully reserved.\n\n` +
+            `Booking ID: ${bookingId}\n\n` +
+            `A WhatsApp confirmation will be sent to:\n` +
+            `${contactData.phone}\n\n` +
+            `Thank you for choosing us.`
+          );
+        } else {
+          setSuccessMsg(
+            `Booking Confirmed ✓\n\n` +
+            `Your appointment has been reserved successfully.\n\n` +
+            `We could not send the WhatsApp confirmation right now.\n\n` +
+            `Booking ID: ${bookingId}\n\n` +
+            `Please note down this ID for your reference.`
+          );
+        }
+        setTimeout(() => navigate('/'), 6000);
       })
       .catch(err => {
-        // Fallback for demonstration if offline
-        setSuccessMsg('Reservation confirmed! Your booking details have been registered.');
-        setTimeout(() => navigate('/'), 2500);
+        setErrorMsg(err.response?.data?.message || 'Failed to complete your reservation. Please try again.');
       });
   };
 
@@ -146,13 +167,13 @@ const Booking = () => {
           </div>
 
           {errorMsg && (
-            <div style={{ backgroundColor: 'rgba(255, 180, 171, 0.1)', border: '1px solid #ffb4ab', color: '#ffb4ab', padding: '12px', marginBottom: '20px', fontSize: '14px' }}>
+            <div style={{ backgroundColor: 'rgba(255, 180, 171, 0.1)', border: '1px solid #ffb4ab', color: '#ffb4ab', padding: '12px', marginBottom: '20px', fontSize: '14px', whiteSpace: 'pre-line' }}>
               {errorMsg}
             </div>
           )}
 
           {successMsg && (
-            <div style={{ backgroundColor: 'rgba(242, 202, 80, 0.1)', border: '1px solid #f2ca50', color: '#f2ca50', padding: '16px', marginBottom: '20px', fontSize: '14px', textAlign: 'center' }}>
+            <div style={{ backgroundColor: 'rgba(242, 202, 80, 0.1)', border: '1px solid #f2ca50', color: '#f2ca50', padding: '16px', marginBottom: '20px', fontSize: '15px', textAlign: 'center', whiteSpace: 'pre-line', lineHeight: '1.6' }}>
               {successMsg}
             </div>
           )}

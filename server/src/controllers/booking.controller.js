@@ -5,13 +5,46 @@ const User = require('../models/User.model');
 const ApiError = require('../utils/apiError');
 const ApiResponse = require('../utils/apiResponse');
 const { sendBookingConfirmation } = require('../services/emailService');
+const { sendWhatsAppTemplate, formatPhoneNumber } = require('../services/whatsappService');
 
 exports.createBooking = async (req, res, next) => {
   try {
-    const { staffId, serviceId, date, timeSlot, notes } = req.body;
-    const customerId = req.user._id;
+    const { staffId, serviceId, date, timeSlot, notes, customerName, customerPhone, customerEmail } = req.body;
+    
+    // Resolve user details if logged in, otherwise use guest input
+    const isGuest = !req.user;
+    const finalCustomerId = isGuest ? null : req.user._id;
+    const finalCustomerName = isGuest ? customerName : req.user.name;
+    const finalCustomerPhone = isGuest ? customerPhone : req.user.phone;
+    const finalCustomerEmail = isGuest ? customerEmail : req.user.email;
 
-    // Validate inputs
+    // ── Input & Security Validation ──────────────────────────────────────────
+    if (!staffId || typeof staffId !== 'string') {
+      throw new ApiError(400, 'Invalid stylist selection');
+    }
+    if (!serviceId || typeof serviceId !== 'string') {
+      throw new ApiError(400, 'Invalid service selection');
+    }
+    if (!date || typeof date !== 'string') {
+      throw new ApiError(400, 'Invalid date selection');
+    }
+    if (!timeSlot || typeof timeSlot !== 'string') {
+      throw new ApiError(400, 'Invalid time slot selection');
+    }
+    if (!finalCustomerName || typeof finalCustomerName !== 'string' || finalCustomerName.trim().length === 0) {
+      throw new ApiError(400, 'Please enter your name');
+    }
+    if (!finalCustomerPhone || typeof finalCustomerPhone !== 'string' || finalCustomerPhone.trim().length === 0) {
+      throw new ApiError(400, 'Please enter a valid mobile number');
+    }
+    
+    // Validate phone number format (must contain at least 10 digits after cleaning)
+    const cleanedPhone = formatPhoneNumber(finalCustomerPhone);
+    if (!cleanedPhone || cleanedPhone.length < 10) {
+      throw new ApiError(400, 'Please enter a valid phone number with country code (e.g. +91...)');
+    }
+
+    // Validate inputs from DB
     const service = await Service.findById(serviceId);
     if (!service || !service.isActive) {
       throw new ApiError(404, 'Selected service is invalid or unavailable');
@@ -25,6 +58,13 @@ exports.createBooking = async (req, res, next) => {
     const bookingDate = new Date(date);
     bookingDate.setHours(0,0,0,0);
 
+    // Prevent past date bookings
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (bookingDate < today) {
+      throw new ApiError(400, 'Appointments cannot be booked in the past.');
+    }
+
     // Prevent double booking
     const doubleBooked = await Booking.findOne({
       staffId,
@@ -37,38 +77,97 @@ exports.createBooking = async (req, res, next) => {
       throw new ApiError(400, 'This stylist is already reserved for the selected time slot.');
     }
 
+    // Create the booking (Backend resolves price, not the client request)
     const booking = await Booking.create({
-      customerId,
+      customerId: finalCustomerId,
+      customerName: finalCustomerName.trim(),
+      customerPhone: cleanedPhone,
+      customerEmail: finalCustomerEmail ? finalCustomerEmail.trim() : '',
       staffId,
       serviceId,
       date: bookingDate,
       timeSlot,
-      totalAmount: service.price,
-      notes
+      totalAmount: service.price, // Database Authoritative Price
+      notes: typeof notes === 'string' ? notes.substring(0, 500) : ''
     });
 
-    // Award loyalty points: 10% of total price
-    const loyaltyPointsEarned = Math.floor(service.price * 0.1);
-    await User.findByIdAndUpdate(customerId, {
-      $inc: { loyaltyPoints: loyaltyPointsEarned }
-    });
+    // Award loyalty points ONLY if customer is registered and logged in
+    if (!isGuest) {
+      const loyaltyPointsEarned = Math.floor(service.price * 0.1);
+      await User.findByIdAndUpdate(finalCustomerId, {
+        $inc: { loyaltyPoints: loyaltyPointsEarned }
+      });
+    }
 
-    // Send confirmation email
-    const customerName = req.user.name;
-    const customerEmail = req.user.email;
-    const serviceName = service.name;
-    const staffName = staff.userId.name;
-    
-    await sendBookingConfirmation(customerEmail, {
-      customerName,
-      serviceName,
-      staffName,
-      date: bookingDate.toLocaleDateString(),
-      timeSlot,
-      price: service.price
-    });
+    // Send confirmation email (if email is provided)
+    if (finalCustomerEmail) {
+      try {
+        const staffName = staff.userId.name;
+        await sendBookingConfirmation(finalCustomerEmail, {
+          customerName: finalCustomerName,
+          serviceName: service.name,
+          staffName,
+          date: bookingDate.toLocaleDateString(),
+          timeSlot,
+          price: service.price
+        });
+      } catch (err) {
+        console.warn('⚠️ Email notification failed:', err.message);
+      }
+    }
 
-    res.status(201).json(new ApiResponse(201, booking, 'Booking created successfully'));
+    // Send WhatsApp Cloud API Notification
+    let whatsappSent = false;
+    try {
+      const staffName = staff.userId.name;
+      const formattedDate = bookingDate.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+
+      // Prepare variables matching Meta template: 
+      // 1. Customer Name
+      // 2. Service Name
+      // 3. Date
+      // 4. Time
+      // 5. Booking ID
+      // 6. Shop Name (from central configs/env)
+      // 7. Shop Location (from central configs/env)
+      const shopName = process.env.BUSINESS_NAME || 'Golden Scissor Digital Lounge';
+      const shopLocation = process.env.BUSINESS_LOCATION || 'Golden Scissor Lounge Address';
+
+      const parameters = [
+        finalCustomerName.trim(),
+        service.name,
+        formattedDate,
+        timeSlot,
+        booking._id.toString(),
+        shopName,
+        shopLocation
+      ];
+
+      const result = await sendWhatsAppTemplate(cleanedPhone, { parameters });
+      if (result.success) {
+        whatsappSent = true;
+        booking.whatsapp.confirmationSent = true;
+        booking.whatsapp.confirmationSentAt = new Date();
+        await booking.save();
+      }
+    } catch (err) {
+      console.error('⚠️ WhatsApp notification flow failure:', err.message);
+    }
+
+    res.status(201).json(
+      new ApiResponse(
+        201, 
+        { 
+          booking, 
+          whatsappSent 
+        }, 
+        'Booking created successfully'
+      )
+    );
   } catch (error) {
     next(error);
   }

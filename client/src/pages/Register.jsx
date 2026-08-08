@@ -13,7 +13,7 @@ const Register = () => {
     setErrorMsg('');
     setLoading(true);
 
-    axios.post('http://localhost:5000/api/auth/register', formData, { withCredentials: true })
+    axios.post('http://localhost:5001/api/auth/register', formData, { withCredentials: true })
       .then(res => {
         setLoading(false);
         navigate('/dashboard');

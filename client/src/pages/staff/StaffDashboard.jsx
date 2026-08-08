@@ -15,7 +15,7 @@ const StaffDashboard = () => {
 
   useEffect(() => {
     // Fetch current user + assigned bookings
-    axios.get('http://localhost:5000/api/auth/me', { withCredentials: true })
+    axios.get('http://localhost:5001/api/auth/me', { withCredentials: true })
       .then(res => setStaffProfile(res.data.data))
       .catch(() => {
         setStaffProfile({
@@ -25,7 +25,7 @@ const StaffDashboard = () => {
         });
       });
 
-    axios.get('http://localhost:5000/api/bookings', { withCredentials: true })
+    axios.get('http://localhost:5001/api/bookings', { withCredentials: true })
       .then(res => setBookings(res.data.data))
       .catch(() => {
         const today = new Date().toISOString().split('T')[0];
@@ -61,7 +61,7 @@ const StaffDashboard = () => {
   }, []);
 
   const handleStatusUpdate = (id, newStatus) => {
-    axios.put(`http://localhost:5000/api/bookings/${id}/status`, { status: newStatus }, { withCredentials: true })
+    axios.put(`http://localhost:5001/api/bookings/${id}/status`, { status: newStatus }, { withCredentials: true })
       .then(() => {
         setBookings(prev => prev.map(b => b._id === id ? { ...b, status: newStatus } : b));
         setMsg(`Booking status updated to "${newStatus}".`);
@@ -81,7 +81,7 @@ const StaffDashboard = () => {
 
   const saveAvailability = () => {
     setSavingAvailability(true);
-    axios.put('http://localhost:5000/api/staff/availability/me', { availability }, { withCredentials: true })
+    axios.put('http://localhost:5001/api/staff/availability/me', { availability }, { withCredentials: true })
       .then(() => {
         setMsg('Your availability schedule has been updated.');
         setSavingAvailability(false);
@@ -99,7 +99,7 @@ const StaffDashboard = () => {
   });
 
   const handleLogout = () => {
-    axios.post('http://localhost:5000/api/auth/logout', {}, { withCredentials: true })
+    axios.post('http://localhost:5001/api/auth/logout', {}, { withCredentials: true })
       .finally(() => navigate('/login'));
   };
 
@@ -268,11 +268,11 @@ const StaffDashboard = () => {
                               <h3 style={{ color: '#f2ca50', fontSize: '18px', marginBottom: '4px' }}>{b.serviceId?.name}</h3>
                               <p style={{ color: '#e5e2e1', fontSize: '14px', marginBottom: '2px' }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: '14px', verticalAlign: 'middle', marginRight: '4px' }}>person</span>
-                                {b.customerId?.name}
+                                {b.customerName || b.customerId?.name || 'Guest'}
                               </p>
                               <p style={{ color: '#d0c5af', fontSize: '13px' }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: '13px', verticalAlign: 'middle', marginRight: '4px' }}>call</span>
-                                {b.customerId?.phone || 'No phone'}
+                                {b.customerPhone || b.customerId?.phone || 'No phone'}
                               </p>
                               <p style={{ color: '#d0c5af', fontSize: '12px', marginTop: '4px' }}>
                                 Duration: {b.serviceId?.duration} min · ${b.totalAmount}
@@ -362,7 +362,7 @@ const StaffDashboard = () => {
                         const sc = statusColor(b.status);
                         return (
                           <tr key={b._id} style={{ borderBottom: '1px solid rgba(77,70,53,0.2)' }}>
-                            <td style={{ padding: '12px', color: '#e5e2e1', fontSize: '14px' }}>{b.customerId?.name}</td>
+                            <td style={{ padding: '12px', color: '#e5e2e1', fontSize: '14px' }}>{b.customerName || b.customerId?.name || 'Guest'}</td>
                             <td style={{ padding: '12px', color: '#d0c5af', fontSize: '14px' }}>{b.serviceId?.name}</td>
                             <td style={{ padding: '12px', color: '#d0c5af', fontSize: '13px' }}>
                               {new Date(b.date).toLocaleDateString()}

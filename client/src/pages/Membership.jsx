@@ -6,7 +6,7 @@ const Membership = () => {
   const [plans, setPlans] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/memberships')
+    axios.get('http://localhost:5001/api/memberships')
       .then(res => setPlans(res.data.data))
       .catch(() => {
         setPlans([

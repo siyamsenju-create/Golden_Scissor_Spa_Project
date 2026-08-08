@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import businessConfig from '../../config/businessConfig';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -58,7 +59,7 @@ const Navbar = () => {
               letterSpacing: '-0.5px'
             }}
           >
-            Golden Scissor Spa
+            {businessConfig.name}
           </span>
         </Link>
 
@@ -102,7 +103,7 @@ const Navbar = () => {
               color: '#d0c5af'
             }}
           >
-            Login
+            Portal
           </Link>
           <Link to="/booking">
             <button
@@ -182,7 +183,7 @@ const Navbar = () => {
             </Link>
           ))}
           <Link to="/login" onClick={() => setIsOpen(false)} style={{ color: '#d0c5af', textTransform: 'uppercase', letterSpacing: '1.5px', fontSize: '14px', fontWeight: '600' }}>
-            Login
+            Portal
           </Link>
           <Link to="/booking" onClick={() => setIsOpen(false)}>
             <button

@@ -8,7 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     // Fetch services from API fallback to defaults
-    axios.get('http://localhost:5000/api/services')
+    axios.get('http://localhost:5001/api/services')
       .then(res => setServices(res.data.data))
       .catch(() => {
         setServices([
@@ -18,7 +18,7 @@ const Home = () => {
         ]);
       });
 
-    axios.get('http://localhost:5000/api/gallery')
+    axios.get('http://localhost:5001/api/gallery')
       .then(res => setGallery(res.data.data))
       .catch(() => {});
   }, []);

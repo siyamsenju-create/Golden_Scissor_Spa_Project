@@ -7,7 +7,7 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/gallery')
+    axios.get('http://localhost:5001/api/gallery')
       .then(res => setItems(res.data.data))
       .catch(() => {
         setItems([

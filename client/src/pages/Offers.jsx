@@ -6,7 +6,7 @@ const Offers = () => {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/offers')
+    axios.get('http://localhost:5001/api/offers')
       .then(res => setOffers(res.data.data))
       .catch(() => {
         setOffers([

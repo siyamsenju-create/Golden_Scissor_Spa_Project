@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import WebGLBackground from './components/common/WebGLBackground';
@@ -52,9 +52,9 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Navigate to="/login" replace />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/dashboard" element={<CustomerDashboard />} />
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/staff" element={<StaffDashboard />} />
         </Routes>

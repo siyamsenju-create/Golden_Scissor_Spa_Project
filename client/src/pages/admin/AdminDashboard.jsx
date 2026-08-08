@@ -11,7 +11,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     // Fetch analytics KPIs
-    axios.get('http://localhost:5000/api/analytics/dashboard', { withCredentials: true })
+    axios.get('http://localhost:5001/api/analytics/dashboard', { withCredentials: true })
       .then(res => setStats(res.data.data))
       .catch(() => {
         setStats({
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
       });
 
     // Fetch all bookings
-    axios.get('http://localhost:5000/api/bookings', { withCredentials: true })
+    axios.get('http://localhost:5001/api/bookings', { withCredentials: true })
       .then(res => setBookings(res.data.data))
       .catch(() => {
         setBookings([
@@ -45,13 +45,13 @@ const AdminDashboard = () => {
       });
 
     // Fetch contact inquiries
-    axios.get('http://localhost:5000/api/contact', { withCredentials: true })
+    axios.get('http://localhost:5001/api/contact', { withCredentials: true })
       .then(res => setInquiries(res.data.data))
       .catch(() => {});
   }, []);
 
   const handleStatusUpdate = (id, newStatus) => {
-    axios.put(`http://localhost:5000/api/bookings/${id}/status`, { status: newStatus }, { withCredentials: true })
+    axios.put(`http://localhost:5001/api/bookings/${id}/status`, { status: newStatus }, { withCredentials: true })
       .then(() => {
         setBookings(prev => prev.map(b => b._id === id ? { ...b, status: newStatus } : b));
       })
@@ -61,7 +61,7 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = () => {
-    axios.post('http://localhost:5000/api/auth/logout', {}, { withCredentials: true })
+    axios.post('http://localhost:5001/api/auth/logout', {}, { withCredentials: true })
       .finally(() => navigate('/login'));
   };
 
@@ -167,7 +167,12 @@ const AdminDashboard = () => {
               <tbody>
                 {bookings.map(b => (
                   <tr key={b._id} style={{ borderBottom: '1px solid rgba(77, 70, 53, 0.2)', color: '#d0c5af', fontSize: '14px' }}>
-                    <td style={{ padding: '12px' }}>{b.customerId?.name || 'Client'}</td>
+                    <td style={{ padding: '12px' }}>
+                      <strong>{b.customerName || b.customerId?.name || 'Client'}</strong>
+                      <div style={{ fontSize: '11px', color: '#8d8065', marginTop: '2px' }}>
+                        {b.customerPhone || b.customerId?.phone || ''}
+                      </div>
+                    </td>
                     <td style={{ padding: '12px', color: '#e5e2e1' }}>{b.serviceId?.name || 'Service'}</td>
                     <td style={{ padding: '12px' }}>{b.staffId?.userId?.name || 'Stylist'}</td>
                     <td style={{ padding: '12px' }}>{new Date(b.date).toLocaleDateString()} {b.timeSlot}</td>

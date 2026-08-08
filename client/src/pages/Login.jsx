@@ -13,7 +13,7 @@ const Login = () => {
     setErrorMsg('');
     setLoading(true);
 
-    axios.post('http://localhost:5000/api/auth/login', formData, { withCredentials: true })
+    axios.post('http://localhost:5001/api/auth/login', formData, { withCredentials: true })
       .then(res => {
         setLoading(false);
         const role = res.data.data.user.role;
@@ -91,10 +91,6 @@ const Login = () => {
               {loading ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
-
-          <div style={{ marginTop: '30px', textAlign: 'center', color: '#d0c5af', fontSize: '14px' }}>
-            New to the Sanctuary? <Link to="/register" style={{ color: '#f2ca50', fontWeight: 'bold' }}>Create an Account</Link>
-          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import businessConfig from '../config/businessConfig';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
@@ -8,7 +9,7 @@ const Contact = () => {
 
   const handleInquirySubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/api/contact', formData)
+    axios.post('http://localhost:5001/api/contact', formData)
       .then(res => {
         setStatusMsg('Your message has been received by our concierge.');
         setFormData({ name: '', email: '', phone: '', message: '' });
@@ -18,7 +19,7 @@ const Contact = () => {
 
   const handleCallbackSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/api/contact/callback', callbackData)
+    axios.post('http://localhost:5001/api/contact/callback', callbackData)
       .then(res => {
         setStatusMsg('Callback request received.');
         setCallbackData({ name: '', phone: '' });
@@ -59,7 +60,11 @@ const Contact = () => {
                 <span className="material-symbols-outlined" style={{ color: '#f2ca50', fontSize: '24px' }}>call</span>
                 <div>
                   <h4 style={{ color: '#f2ca50', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>Direct Line</h4>
-                  <p style={{ color: '#e5e2e1', fontSize: '16px' }}>+1 (555) 012-3456</p>
+                  <p style={{ color: '#e5e2e1', fontSize: '16px' }}>
+                    <a href={`tel:${businessConfig.phone.replace(/\s+/g, '')}`} style={{ color: '#e5e2e1', textDecoration: 'none' }}>
+                      {businessConfig.phone}
+                    </a>
+                  </p>
                 </div>
               </div>
 
@@ -67,7 +72,11 @@ const Contact = () => {
                 <span className="material-symbols-outlined" style={{ color: '#f2ca50', fontSize: '24px' }}>chat_bubble</span>
                 <div>
                   <h4 style={{ color: '#f2ca50', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>WhatsApp Concierge</h4>
-                  <p style={{ color: '#e5e2e1', fontSize: '16px' }}>+1 (555) 098-7654</p>
+                  <p style={{ color: '#e5e2e1', fontSize: '16px' }}>
+                    <a href={`https://wa.me/${businessConfig.whatsapp}`} target="_blank" rel="noopener noreferrer" style={{ color: '#e5e2e1', textDecoration: 'none' }}>
+                      +{businessConfig.whatsapp}
+                    </a>
+                  </p>
                 </div>
               </div>
 
@@ -83,7 +92,11 @@ const Contact = () => {
                 <span className="material-symbols-outlined" style={{ color: '#f2ca50', fontSize: '24px' }}>location_on</span>
                 <div>
                   <h4 style={{ color: '#f2ca50', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>Our Estate</h4>
-                  <p style={{ color: '#e5e2e1', fontSize: '16px' }}>122 Golden Plaza, Fifth Avenue, NY 10001</p>
+                  <p style={{ color: '#e5e2e1', fontSize: '16px', lineHeight: '1.4' }}>
+                    <a href={businessConfig.mapsUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#e5e2e1', textDecoration: 'none' }}>
+                      {businessConfig.address}
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>

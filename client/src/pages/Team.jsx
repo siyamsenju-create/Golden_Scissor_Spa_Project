@@ -5,7 +5,7 @@ const Team = () => {
   const [staffList, setStaffList] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/staff')
+    axios.get('http://localhost:5001/api/staff')
       .then(res => setStaffList(res.data.data))
       .catch(() => {
         setStaffList([

@@ -5,7 +5,7 @@ const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/reviews')
+    axios.get('http://localhost:5001/api/reviews')
       .then(res => setReviews(res.data.data))
       .catch(() => {
         setReviews([

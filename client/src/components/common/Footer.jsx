@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import businessConfig from '../../config/businessConfig';
 
 const Footer = () => {
   return (
@@ -37,7 +38,7 @@ const Footer = () => {
                 color: '#f2ca50'
               }}
             >
-              Golden Scissor Spa
+              {businessConfig.name}
             </span>
           </div>
           <p style={{ color: '#d0c5af', fontSize: '14px', lineHeight: '1.6' }}>
@@ -162,7 +163,7 @@ const Footer = () => {
           }}
         >
           <p style={{ color: '#d0c5af', fontSize: '13px', fontFamily: "'Manrope', sans-serif" }}>
-            © 2024 Golden Scissor Spa. The Sanctuary of Precision.
+            © {new Date().getFullYear()} {businessConfig.name}. The Sanctuary of Precision.
           </p>
           <p
             style={{

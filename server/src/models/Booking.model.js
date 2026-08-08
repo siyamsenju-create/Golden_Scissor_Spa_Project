@@ -5,7 +5,21 @@ const BookingSchema = new mongoose.Schema(
     customerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'Customer ID is required']
+      required: false
+    },
+    customerName: {
+      type: String,
+      required: [true, 'Customer name is required'],
+      trim: true
+    },
+    customerPhone: {
+      type: String,
+      required: [true, 'Customer phone number is required'],
+      trim: true
+    },
+    customerEmail: {
+      type: String,
+      trim: true
     },
     staffId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -38,9 +52,13 @@ const BookingSchema = new mongoose.Schema(
       type: String,
       maxlength: 500
     },
-    reminderSent: {
-      type: Boolean,
-      default: false
+    whatsapp: {
+      confirmationSent: { type: Boolean, default: false },
+      confirmationSentAt: { type: Date },
+      reminder24hSent: { type: Boolean, default: false },
+      reminder24hSentAt: { type: Date },
+      reminder2hSent: { type: Boolean, default: false },
+      reminder2hSentAt: { type: Date }
     }
   },
   { timestamps: true }

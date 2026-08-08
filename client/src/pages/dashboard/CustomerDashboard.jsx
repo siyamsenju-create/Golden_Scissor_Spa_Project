@@ -12,7 +12,7 @@ const CustomerDashboard = () => {
 
   useEffect(() => {
     // Fetch profile
-    axios.get('http://localhost:5000/api/auth/me', { withCredentials: true })
+    axios.get('http://localhost:5001/api/auth/me', { withCredentials: true })
       .then(res => setUser(res.data.data))
       .catch(() => {
         // Fallback user if non-authed demo
@@ -26,7 +26,7 @@ const CustomerDashboard = () => {
       });
 
     // Fetch bookings
-    axios.get('http://localhost:5000/api/bookings', { withCredentials: true })
+    axios.get('http://localhost:5001/api/bookings', { withCredentials: true })
       .then(res => setBookings(res.data.data))
       .catch(() => {
         setBookings([
@@ -36,7 +36,7 @@ const CustomerDashboard = () => {
       });
 
     // Fetch wishlist
-    axios.get('http://localhost:5000/api/users/wishlist', { withCredentials: true })
+    axios.get('http://localhost:5001/api/users/wishlist', { withCredentials: true })
       .then(res => setWishlist(res.data.data))
       .catch(() => {
         setWishlist([
@@ -46,7 +46,7 @@ const CustomerDashboard = () => {
   }, []);
 
   const handleCancelBooking = (bookingId) => {
-    axios.put(`http://localhost:5000/api/bookings/${bookingId}/cancel`, {}, { withCredentials: true })
+    axios.put(`http://localhost:5001/api/bookings/${bookingId}/cancel`, {}, { withCredentials: true })
       .then(() => {
         setMsg('Booking cancelled successfully.');
         setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'cancelled' } : b));
@@ -55,7 +55,7 @@ const CustomerDashboard = () => {
   };
 
   const handleLogout = () => {
-    axios.post('http://localhost:5000/api/auth/logout', {}, { withCredentials: true })
+    axios.post('http://localhost:5001/api/auth/logout', {}, { withCredentials: true })
       .finally(() => navigate('/login'));
   };
 
